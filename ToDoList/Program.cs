@@ -1,7 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using ToDoList.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<TaskStoreContext>(options => options.UseNpgsql(connection));
 
 var app = builder.Build();
 
