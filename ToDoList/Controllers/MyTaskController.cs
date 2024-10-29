@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ToDoList.Models;
+using ToDoList.Services;
 
 namespace ToDoList.Controllers
 {
@@ -42,19 +44,24 @@ namespace ToDoList.Controllers
         
         public IActionResult Create()
         {
+            ViewData["Priorities"] = new SelectList(Enum.GetValues(typeof(Priority)).Cast<Priority>());
             return View();
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,Status,CreatedDate,OpenDate,CloseDate,UserName")] MyTask myTask)
+        public async Task<IActionResult> Create([Bind("Name,Description,Priority")] MyTask myTask)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(myTask);
+                myTask.Status = Status.Новая;
+                myTask.CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow);
+
+                await _context.AddAsync(myTask);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Priorities"] = new SelectList(Enum.GetValues(typeof(Priority)).Cast<Priority>());
             return View(myTask);
         }
         
@@ -75,7 +82,7 @@ namespace ToDoList.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Priority,Status,CreatedDate,OpenDate,CloseDate,UserName")] MyTask myTask)
+        public async Task<IActionResult> Edit(int id, MyTask myTask)
         {
             if (id != myTask.Id)
             {
@@ -127,14 +134,46 @@ namespace ToDoList.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var myTask = await _context.MyTasks.FindAsync(id);
-            if (myTask != null)
+            if (myTask != null && myTask.Status == Status.Закрыта) 
             {
                 _context.MyTasks.Remove(myTask);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        //---------------------------------------------------
+        public async Task<IActionResult> Open(int id)
+        {
+            var myTask = await _context.MyTasks.FindAsync(id);
+            if (myTask != null || myTask.Status != Status.Новая)
+            {
+                return NotFound();
             }
 
+            myTask.Status = Status.Открыта;
+            myTask.OpenDate = DateOnly.FromDateTime(DateTime.Now);
+            _context.Update(myTask);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Close(int id)
+        {
+            var myTask = await _context.MyTasks.FindAsync(id);
+            if (myTask != null || myTask.Status != Status.Открыта)
+            {
+                return NotFound();
+            }
+
+            myTask.Status = Status.Закрыта;
+            myTask.CloseDate = DateOnly.FromDateTime(DateTime.Now);
+            _context.Update(myTask);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        
+        //---------------------------------------------------
 
         private bool MyTaskExists(int id)
         {
