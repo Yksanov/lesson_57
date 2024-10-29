@@ -1,11 +1,19 @@
 is_global = true
 build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ToDoList
 build_property.RootNamespace = ToDoList
@@ -18,12 +26,24 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\Attractor\month#2\ToDoList\ToDoList
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/Attractor/month\#2/ToDoList/ToDoList/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Attractor/month\#2/ToDoList/ToDoList/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Attractor/month\#2/ToDoList/ToDoList/Views/Shared/Error.cshtml]
