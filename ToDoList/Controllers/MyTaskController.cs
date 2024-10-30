@@ -21,7 +21,7 @@ namespace ToDoList.Controllers
             _context = context;
         }
         
-        public async Task<IActionResult> Index(SortTaskState sortOrder = SortTaskState.NameAsc, int page = 3)
+        public async Task<IActionResult> Index(Priority? priority, Status? status, string? taskname, SortTaskState? sortOrder = SortTaskState.NameAsc, int page = 1)
         {
             IEnumerable<MyTask> task = await _context.MyTasks.ToListAsync();
             ViewBag.NameSort = sortOrder == SortTaskState.NameAsc ? SortTaskState.NameDesc : SortTaskState.NameAsc;
@@ -56,6 +56,48 @@ namespace ToDoList.Controllers
                     break;
             }
 
+            if (taskname != null)
+                task = task.Where(t => t.Name == taskname);
+            
+            ViewData["Priorities"] = new SelectList(Enum.GetValues(typeof(Priority)).Cast<Priority>(), "Priority");
+            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(Status)).Cast<Status>(), "Status");
+            if (priority.HasValue)
+                task = task.Where(t => t.Priority == priority.Value);
+            if (status.HasValue)
+                task = task.Where(t => t.Status == status.Value);
+            
+            // if (priority != null)
+            // {
+            //     switch (priority)
+            //     {
+            //         case Priority.Высокий:
+            //             task = task.Where(t => t.Priority == Priority.Высокий);
+            //             break;
+            //         case Priority.Средний:
+            //             task = task.Where(t => t.Priority == Priority.Средний);
+            //             break;
+            //         case Priority.Низкий:
+            //             task = task.Where(t => t.Priority == Priority.Низкий);
+            //             break;
+            //     }
+            // }
+            //
+            // if (status != null)
+            // {
+            //     switch (status)
+            //     {
+            //         case Status.Новая:
+            //             task = task.Where(t => t.Status == Status.Новая);
+            //             break;
+            //         case Status.Открыта:
+            //             task = task.Where(t => t.Status == Status.Открыта);
+            //             break;
+            //         case Status.Закрыта:
+            //             task = task.Where(t => t.Status == Status.Закрыта);
+            //             break;
+            //     }
+            // }
+            
             int pageSize = 3;
             var items = task.Skip((page - 1) * pageSize).Take(pageSize);
             PageViewModel pvm = new PageViewModel(task.Count(), page, pageSize);

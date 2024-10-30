@@ -8,19 +8,43 @@
 <div class="container">
     <div class="card border-5">
         <div class="card-header">
-            <p><strong>Задача новая</strong></p>
+            <p>
+                <strong>Задача новая</strong>
+            </p>
         </div>
         <div class="row align-content-around pb-5">
             <div class="col-2 px-5">
                 <p>Статус</p>
                 <p>Приоритет</p>
                 <p>Номер</p>
+                <p>Дата создания</p>
+                <p>
+                    @if (Model.CloseDate != null)
+                    {
+                        <p>Дата закрытия</p>
+                    }
+                    else
+                    {
+                        <p>Дата открытия</p>
+                    }
+                </p>
                 <a class="btn btn-outline-primary" asp-action="Open" asp-route-id="@Model?.Id">Открыть</a>
             </div>
             <div class="col-2">
                 <p>@Html.DisplayFor(model => model.Status)</p>
                 <p>@Html.DisplayFor(model => model.Priority)</p>
                 <p>@Html.DisplayFor(model => model.Id)</p>
+                <p>@Html.DisplayFor(model => model.CreatedDate)</p>
+                <p>
+                    @if (Model.CloseDate != null)
+                    {
+                        @Html.DisplayFor(model => model.CloseDate)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.OpenDate)
+                    }
+                </p>
                 <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model?.Id">Удалить</a>
             </div>
             <div class="col-3 border border-end-0 border-dark">
