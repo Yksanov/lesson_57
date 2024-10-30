@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ToDoList.Models;
 using ToDoList.Services;
+using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
@@ -20,9 +21,52 @@ namespace ToDoList.Controllers
             _context = context;
         }
         
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(SortTaskState sortOrder = SortTaskState.NameAsc, int page = 3)
         {
-            return View(await _context.MyTasks.ToListAsync());
+            IEnumerable<MyTask> task = await _context.MyTasks.ToListAsync();
+            ViewBag.NameSort = sortOrder == SortTaskState.NameAsc ? SortTaskState.NameDesc : SortTaskState.NameAsc;
+            ViewBag.PrioritySort = sortOrder == SortTaskState.PriorityAsc ? SortTaskState.PriorityDesc : SortTaskState.PriorityAsc;
+            ViewBag.StatusSort = sortOrder == SortTaskState.StatusAsc ? SortTaskState.StatusDesc : SortTaskState.StatusAsc;
+            ViewBag.CreateDate = sortOrder == SortTaskState.CreatedDateAsc ? SortTaskState.CreatedDateDesc : SortTaskState.CreatedDateAsc;
+            switch (sortOrder)
+            {
+                case SortTaskState.NameAsc:
+                    task = task.OrderBy(t => t.Name);
+                    break;
+                case SortTaskState.NameDesc:
+                    task = task.OrderByDescending(t => t.Name);
+                    break;
+                case SortTaskState.PriorityAsc:
+                    task = task.OrderBy(t => t.Priority);
+                    break;
+                case SortTaskState.PriorityDesc:
+                    task = task.OrderByDescending(t => t.Priority);
+                    break;
+                case SortTaskState.StatusAsc:
+                    task = task.OrderBy(t => t.Status);
+                    break;
+                case SortTaskState.StatusDesc:
+                    task = task.OrderByDescending(t => t.Status);
+                    break;
+                case SortTaskState.CreatedDateAsc:
+                    task = task.OrderBy(t => t.CreatedDate);
+                    break;
+                case SortTaskState.CreatedDateDesc:
+                    task = task.OrderByDescending(t => t.CreatedDate);
+                    break;
+            }
+
+            int pageSize = 3;
+            var items = task.Skip((page - 1) * pageSize).Take(pageSize);
+            PageViewModel pvm = new PageViewModel(task.Count(), page, pageSize);
+
+            var vm = new TaskModels
+            {
+                Tasks = items.ToList(),
+                PageViewModel = pvm
+            };
+            
+            return View(vm);
         }
         
         public async Task<IActionResult> Details(int? id)
@@ -109,6 +153,7 @@ namespace ToDoList.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Priorities"] = new SelectList(Enum.GetValues(typeof(Priority)).Cast<Priority>());
             return View(myTask);
         }
         
@@ -134,11 +179,15 @@ namespace ToDoList.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var myTask = await _context.MyTasks.FindAsync(id);
-            if (myTask != null && myTask.Status == Status.Закрыта) 
+            if (myTask == null)
             {
-                _context.MyTasks.Remove(myTask);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            myTask.Status = Status.Закрыта;
+            _context.MyTasks.Remove(myTask);
+            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
@@ -146,7 +195,7 @@ namespace ToDoList.Controllers
         public async Task<IActionResult> Open(int id)
         {
             var myTask = await _context.MyTasks.FindAsync(id);
-            if (myTask != null || myTask.Status != Status.Новая)
+            if (myTask == null || myTask.Status != Status.Новая)
             {
                 return NotFound();
             }
@@ -161,7 +210,8 @@ namespace ToDoList.Controllers
         public async Task<IActionResult> Close(int id)
         {
             var myTask = await _context.MyTasks.FindAsync(id);
-            if (myTask != null || myTask.Status != Status.Открыта)
+            
+            if (myTask == null || myTask.Status != Status.Открыта)
             {
                 return NotFound();
             }

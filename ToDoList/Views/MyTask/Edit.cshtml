@@ -11,18 +11,21 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Название задачи</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+
+            <div class="form-group py-2">
+                <label asp-for="Priority" class="control-label">Приоритет</label>
+                <select asp-for="Priority" asp-items="ViewBag.Priorities" class="form-control">
+                    <option disabled selected>Выберите приоритет</option>
+                </select>
+                <span asp-validation-for="Priority" class="text-danger"></span>
             </div>
+
             <div class="form-group py-2">
                 <label asp-for="Description" class="control-label">Описание задачи</label>
                 <textarea asp-for="Description" class="form-control" ></textarea>
