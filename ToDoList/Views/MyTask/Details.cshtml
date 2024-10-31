@@ -19,11 +19,11 @@
                 <p>Номер</p>
                 <p>Дата создания</p>
                 <p>
-                    @if (Model.CloseDate != null)
+                    @if (Model.Status == Status.Закрыта)
                     {
                         <p>Дата закрытия</p>
                     }
-                    else
+                    else if(Model.Status == Status.Открыта)
                     {
                         <p>Дата открытия</p>
                     }
@@ -37,11 +37,11 @@
                 <p>@Html.DisplayFor(model => model.Id)</p>
                 <p>@Html.DisplayFor(model => model.CreatedDate)</p>
                 <p>
-                    @if (Model.CloseDate != null)
+                    @if (Model.Status == Status.Закрыта)
                     {
                         @Html.DisplayFor(model => model.CloseDate)
                     }
-                    else
+                    else if(Model.Status == Status.Открыта)
                     {
                         @Html.DisplayFor(model => model.OpenDate)
                     }
