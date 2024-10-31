@@ -16,5 +16,6 @@ public class MyTask
     public DateOnly CreatedDate { get; set; }
     public DateOnly OpenDate { get; set; }
     public DateOnly CloseDate { get; set; }
+    [Required]
     public string? UserName { get; set; }
 }

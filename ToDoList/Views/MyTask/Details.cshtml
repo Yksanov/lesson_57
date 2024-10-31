@@ -28,7 +28,8 @@
                         <p>Дата открытия</p>
                     }
                 </p>
-                <a class="btn btn-outline-primary" asp-action="Open" asp-route-id="@Model?.Id">Открыть</a>
+                <a class="btn btn-outline-primary mb-2" asp-action="Open" asp-route-id="@Model?.Id">Открыть</a>
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a>
             </div>
             <div class="col-2">
                 <p>@Html.DisplayFor(model => model.Status)</p>

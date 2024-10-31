@@ -11,27 +11,47 @@
 
 
 <div class="pb-5">
-    <form method="get" asp-action="Index" class="d-flex align-content-between">
+    <form method="get" asp-action="Index">
+        <div class="d-flex align-content-between">
+            <div class="col-4 px-3">
+                <select name="priority" asp-items="ViewBag.Priorities" class="form-control">
+                    <option value="" disabled selected>Выберите приоритет</option>
+                </select>
+            </div>
+
+            <div class="col-4 px-3">
+                <select name="status" asp-items="ViewBag.Status" class="form-control">
+                    <option value="" disabled selected>Выберите статус</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-outline-success px-4">Filter</button>
+
+            <div class="input-group mb-3 px-3">
+                <input type="text" class="form-control" id="taskname" name="taskname"/>
+                <button class="btn btn-outline-success" type="submit" id="taskname">Search</button>
+            </div>
+        </div>
         
-        <div class="col-4 px-3">
-            <select name="priority" asp-items="ViewBag.Priorities" class="form-control">
-                <option value="" disabled selected>Выберите приоритет</option>
-            </select>
+        <div class="d-flex py-3">
+            <div class="col-3 px-3">
+                <label for="dateFrom" class="form-label">Filter by created date from:</label>
+                <input type="date" id="dateFrom" name="dateFrom" class="form-control">
+                <button class="btn btn-outline-success my-1" type="submit" id="dateFrom">Filter</button>
+            </div>
+            <div class="col-3 px-3">
+                <label for="dateTo" class="form-label">Filter by created date to:</label>
+                <input type="date" id="dateTo" name="dateTo" class="form-control">
+                <button class="btn btn-outline-success my-1" type="submit" id="dateTo">Filter</button>
+            </div>
+
+            <div class="col-4">
+                <label for="description" class="form-label">Filter by words:</label>
+                <input type="text" id="description" name="description" class="form-control">
+                <button class="btn btn-outline-success my-1" type="submit" id="description">Filter</button>
+            </div>
+            
         </div>
-
-        <div class="col-4 px-3">
-            <select name="status" asp-items="ViewBag.Status" class="form-control">
-                <option value="" disabled selected>Выберите статус</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-outline-success px-4">Filter</button>
-
-        <div class="input-group mb-3 px-3">
-            <input type="text" class="form-control" id="taskname" name="taskname"/>
-            <button class="btn btn-outline-success" type="submit" id="taskname">Search</button>
-        </div>
-
     </form>
 </div>
 
@@ -75,7 +95,7 @@
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
             <td>
-                @if (item.Priority == Priority.Высокий || item.Status == Status.Новая)
+                @if (item.Status == Status.Новая)
                 {
                     <a asp-action="Open" asp-route-id="@item.Id">
                         <button class="btn btn-outline-primary">Открыть</button>
@@ -87,7 +107,7 @@
                         <button class="btn btn-outline-primary">Удалить</button>
                     </a>
                 }
-                else if (item.Priority == Priority.Средний || item.Status == Status.Открыта)
+                else if (item.Status == Status.Открыта)
                 {
                     <a asp-action="Close" asp-route-id="@item.Id">
                         <button class="btn btn-outline-primary">Закрыть</button>
@@ -96,7 +116,7 @@
                         <button class="btn btn-outline-primary">Детали</button>
                     </a>
                 }
-                else if (item.Priority == Priority.Низкий || item.Status == Status.Закрыта)
+                else if (item.Status == Status.Закрыта)
                 {
                     <a asp-action="Details" asp-route-id="@item.Id">
                         <button class="btn btn-outline-primary">Детали</button>

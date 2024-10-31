@@ -21,7 +21,7 @@ namespace ToDoList.Controllers
             _context = context;
         }
         
-        public async Task<IActionResult> Index(Priority? priority, Status? status, string? taskname, SortTaskState? sortOrder = SortTaskState.NameAsc, int page = 1)
+        public async Task<IActionResult> Index(Priority? priority, Status? status, string? taskname, DateOnly? dateFrom, DateOnly? dateTo, string? description, SortTaskState? sortOrder = SortTaskState.NameAsc, int page = 1)
         {
             IEnumerable<MyTask> task = await _context.MyTasks.ToListAsync();
             ViewBag.NameSort = sortOrder == SortTaskState.NameAsc ? SortTaskState.NameDesc : SortTaskState.NameAsc;
@@ -65,38 +65,13 @@ namespace ToDoList.Controllers
                 task = task.Where(t => t.Priority == priority.Value);
             if (status.HasValue)
                 task = task.Where(t => t.Status == status.Value);
-            
-            // if (priority != null)
-            // {
-            //     switch (priority)
-            //     {
-            //         case Priority.Высокий:
-            //             task = task.Where(t => t.Priority == Priority.Высокий);
-            //             break;
-            //         case Priority.Средний:
-            //             task = task.Where(t => t.Priority == Priority.Средний);
-            //             break;
-            //         case Priority.Низкий:
-            //             task = task.Where(t => t.Priority == Priority.Низкий);
-            //             break;
-            //     }
-            // }
-            //
-            // if (status != null)
-            // {
-            //     switch (status)
-            //     {
-            //         case Status.Новая:
-            //             task = task.Where(t => t.Status == Status.Новая);
-            //             break;
-            //         case Status.Открыта:
-            //             task = task.Where(t => t.Status == Status.Открыта);
-            //             break;
-            //         case Status.Закрыта:
-            //             task = task.Where(t => t.Status == Status.Закрыта);
-            //             break;
-            //     }
-            // }
+
+            if (dateFrom != null)
+                task = task.Where(t => t.CreatedDate >= dateFrom);
+            if (dateTo != null)
+                task = task.Where(t => t.CreatedDate <= dateTo);
+            if (description != null)
+                task = task.Where(t => t.Description.Contains(description));
             
             int pageSize = 3;
             var items = task.Skip((page - 1) * pageSize).Take(pageSize);
@@ -136,7 +111,7 @@ namespace ToDoList.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Priority")] MyTask myTask)
+        public async Task<IActionResult> Create([Bind("Name,Description,Priority,UserName")] MyTask myTask)
         {
             if (ModelState.IsValid)
             {
@@ -163,6 +138,7 @@ namespace ToDoList.Controllers
             {
                 return NotFound();
             }
+            ViewData["Priorities"] = new SelectList(Enum.GetValues(typeof(Priority)).Cast<Priority>());
             return View(myTask);
         }
         
@@ -179,6 +155,9 @@ namespace ToDoList.Controllers
             {
                 try
                 {
+                    myTask.CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow);
+                    
+                    
                     _context.Update(myTask);
                     await _context.SaveChangesAsync();
                 }
