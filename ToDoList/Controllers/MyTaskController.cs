@@ -156,8 +156,6 @@ namespace ToDoList.Controllers
                 try
                 {
                     myTask.CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow);
-                    
-                    
                     _context.Update(myTask);
                     await _context.SaveChangesAsync();
                 }

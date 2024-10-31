@@ -72,6 +72,7 @@
         <th>
             <a asp-action="Index" asp-route-sortOrder="@ViewBag.CreateDate">Дата создания</a>
         </th>
+        <th>Имя исполнителя</th>
         <th>Действия</th>
     </tr>
     </thead>
@@ -93,6 +94,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
                 @if (item.Status == Status.Новая)
