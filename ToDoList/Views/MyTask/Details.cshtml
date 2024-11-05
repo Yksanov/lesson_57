@@ -9,7 +9,18 @@
     <div class="card border-5">
         <div class="card-header">
             <p>
-                <strong>Задача новая</strong>
+                @if (Model.Status == Status.Новая)
+                {
+                    <strong>Задача новая</strong>
+                }
+                else if (Model.Status == Status.Открыта)
+                {
+                    <strong>Задача открыта</strong>
+                }
+                else if (Model.Status == Status.Закрыта)
+                {
+                    <strong>Задача закрыта</strong>
+                }
             </p>
         </div>
         <div class="row align-content-around pb-5">

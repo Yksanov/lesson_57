@@ -285,3 +285,8 @@ D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\runtimes\win\lib\net7.0\
 D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+D:\Attractor\month#2\ToDoList\ToDoList\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
