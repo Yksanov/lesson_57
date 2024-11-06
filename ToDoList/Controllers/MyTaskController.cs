@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
+    [Authorize]
     public class MyTaskController : Controller
     {
         private readonly TaskStoreContext _context;
@@ -243,6 +246,23 @@ namespace ToDoList.Controllers
         }
         
         //---------------------------------------------------
+
+        public async Task<IActionResult> TakeTask(int id)
+        {
+            var myTask = await _context.MyTasks.FindAsync(id);
+            if (myTask == null || myTask.ExecutorId != null)
+            {
+                return NotFound();
+            }
+
+            myTask.ExecutorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            myTask.Status = Status.Открыта;
+            myTask.OpenDate = DateOnly.FromDateTime(DateTime.Now);
+            
+            _context.Update(myTask);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool MyTaskExists(int id)
         {

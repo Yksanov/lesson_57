@@ -190,7 +190,7 @@ namespace ToDoList.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MyTasks");
+                    b.ToTable("MyTasks", (string)null);
                 });
 
             modelBuilder.Entity("ToDoList.Models.UserI", b =>

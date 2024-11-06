@@ -110,6 +110,9 @@
                     <a asp-action="Delete" asp-route-id="@item.Id">
                         <button class="btn btn-outline-primary">Удалить</button>
                     </a>
+                    <a asp-action="TakeTask" asp-route-id="@item.Id">
+                        <button class="btn btn-outline-primary">Взять задачу</button>
+                    </a>
                 }
                 else if (item.Status == Status.Открыта)
                 {
