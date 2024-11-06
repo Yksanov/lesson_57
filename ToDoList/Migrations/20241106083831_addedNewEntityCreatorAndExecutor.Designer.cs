@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ToDoList.Models;
@@ -11,9 +12,11 @@ using ToDoList.Models;
 namespace ToDoList.Migrations
 {
     [DbContext(typeof(TaskStoreContext))]
-    partial class TaskStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241106083831_addedNewEntityCreatorAndExecutor")]
+    partial class addedNewEntityCreatorAndExecutor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,7 +171,7 @@ namespace ToDoList.Migrations
                     b.Property<DateOnly>("CreatedDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("CreatorId")
+                    b.Property<int>("CreatorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -329,7 +332,8 @@ namespace ToDoList.Migrations
                     b.HasOne("ToDoList.Models.UserI", "UserCreator")
                         .WithMany("CreatorTasks")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ToDoList.Models.UserI", "UserExecutor")
                         .WithMany("ExecutorTasks")

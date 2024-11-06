@@ -28,11 +28,13 @@
             <button type="submit" class="btn btn-outline-success px-4">Filter</button>
 
             <div class="input-group mb-3 px-3">
-                <input type="text" class="form-control" id="taskname" name="taskname"/>
+                <input type="text" class="form-control" id="taskname" name="taskname" placeholder="Поиск по названием"/>
                 <button class="btn btn-outline-success" type="submit" id="taskname">Search</button>
             </div>
         </div>
-        
+    </form>
+    
+    <form method="get" asp-action="Index">
         <div class="d-flex py-3">
             <div class="col-3 px-3">
                 <label for="dateFrom" class="form-label">Filter by created date from:</label>
@@ -47,7 +49,7 @@
 
             <div class="col-4">
                 <label for="description" class="form-label">Filter by words:</label>
-                <input type="text" id="description" name="description" class="form-control">
+                <input type="text" id="description" name="description" class="form-control" placeholder="Поиск по описанием">
                 <button class="btn btn-outline-success my-1" type="submit" id="description">Filter</button>
             </div>
             
@@ -61,16 +63,16 @@
     <tr>
         <th>Номер</th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">Название задачи</a>
+            <a class="btn btn-outline-primary" asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">Название задачи</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.PrioritySort">Приоритет</a>
+            <a class="btn btn-outline-primary" asp-action="Index" asp-route-sortOrder="@ViewBag.PrioritySort">Приоритет</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.StatusSort">Статус</a>
+            <a class="btn btn-outline-primary" asp-action="Index" asp-route-sortOrder="@ViewBag.StatusSort">Статус</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.CreateDate">Дата создания</a>
+            <a class="btn btn-outline-primary" asp-action="Index" asp-route-sortOrder="@ViewBag.CreateDate">Дата создания</a>
         </th>
         <th>Имя исполнителя</th>
         <th>Действия</th>

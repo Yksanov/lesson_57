@@ -19,8 +19,8 @@ public class MyTask
     [Required]
     public string? UserName { get; set; }
     
-    public int CreatorId { get; set; }
-    public UserI UserCreator { get; set; }
+    public int? CreatorId { get; set; }
+    public UserI? UserCreator { get; set; }
     
     public int? ExecutorId { get; set; }
     public UserI? UserExecutor { get; set; }

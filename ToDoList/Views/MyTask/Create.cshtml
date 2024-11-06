@@ -1,3 +1,4 @@
+@using System.Security.Claims
 @model ToDoList.Models.MyTask
 
 @{
@@ -34,6 +35,8 @@
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
+
+            <input type="hidden" asp-for="CreatorId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
             
             <div class="form-group py-2 d-flex justify-content-center">
                 <button type="submit" class="btn btn-outline-primary">Добавить задачу</button>

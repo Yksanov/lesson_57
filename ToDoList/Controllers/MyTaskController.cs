@@ -114,13 +114,15 @@ namespace ToDoList.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Priority,UserName")] MyTask myTask)
+        public async Task<IActionResult> Create([Bind("Name,Description,Priority,CreatorId")] MyTask myTask)
         {
             if (ModelState.IsValid)
             {
                 myTask.Status = Status.Новая;
                 myTask.CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
+                myTask.CreatorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                
                 await _context.AddAsync(myTask);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
