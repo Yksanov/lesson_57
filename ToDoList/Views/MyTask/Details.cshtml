@@ -39,7 +39,7 @@
                         <p>Дата открытия</p>
                     }
                 </p>
-                <a class="btn btn-outline-primary mb-2" asp-action="Open" asp-route-id="@Model?.Id">Открыть</a>
+                <p>Создатель</p>
                 <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a>
             </div>
             <div class="col-2">
@@ -57,7 +57,14 @@
                         @Html.DisplayFor(model => model.OpenDate)
                     }
                 </p>
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model?.Id">Удалить</a>
+                @if(Model.Status == Status.Новая)
+                {
+                    <a class="btn btn-outline-warning" asp-action="Open" asp-route-id="@Model?.Id">Открыть</a>
+                }
+                else if (Model.Status == Status.Открыта)
+                {
+                    <a class="btn btn-outline-warning" asp-action="Close" asp-route-id="@Model?.Id">Закрыт</a>
+                }
             </div>
             <div class="col-3 border border-end-0 border-dark">
                 <h3>Описание задачи</h3>

@@ -26,7 +26,7 @@ namespace ToDoList.Controllers
         
         public async Task<IActionResult> Index(Priority? priority, Status? status, string? taskname, DateOnly? dateFrom, DateOnly? dateTo, string? description, SortTaskState? sortOrder = SortTaskState.NameAsc, int page = 1)
         {
-            IEnumerable<MyTask> task = await _context.MyTasks.ToListAsync();
+            IEnumerable<MyTask> task = await _context.MyTasks.Include(t => t.UserCreator).Include(t => t.UserExecutor).ToListAsync();
             ViewBag.NameSort = sortOrder == SortTaskState.NameAsc ? SortTaskState.NameDesc : SortTaskState.NameAsc;
             ViewBag.PrioritySort = sortOrder == SortTaskState.PriorityAsc ? SortTaskState.PriorityDesc : SortTaskState.PriorityAsc;
             ViewBag.StatusSort = sortOrder == SortTaskState.StatusAsc ? SortTaskState.StatusDesc : SortTaskState.StatusAsc;
@@ -156,12 +156,47 @@ namespace ToDoList.Controllers
                 return NotFound();
             }
 
+            var currentId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var t = await _context.MyTasks.FindAsync(id);
+            if (t == null)
+            {
+                return NotFound();
+            }
+
+            if (t.CreatorId == currentId)
+            {
+                if (myTask.Status != t.Status)
+                {
+                    ModelState.AddModelError(string.Empty, "Создатель не может менять статус!");
+                    return View(myTask);
+                }
+            }
+            else if (t.ExecutorId == currentId)
+            {
+                if (myTask.Status != t.Status)
+                {
+                    t.Status = myTask.Status;
+                }
+            }
+            else
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+            
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    myTask.CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow);
-                    _context.Update(myTask);
+                    if (myTask.Name != t.Name || myTask.Description != t.Description || myTask.Priority != t.Priority)
+                    {
+                        t.Name = myTask.Name;
+                        t.Description = myTask.Description;
+                        t.Priority = myTask.Priority;
+                    }
+                    
+                    t.CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow);
+                    _context.Update(t);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -207,6 +242,13 @@ namespace ToDoList.Controllers
             {
                 return NotFound();
             }
+            
+            var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (myTask.CreatorId != currentUserId)
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
 
             myTask.Status = Status.Закрыта;
             _context.MyTasks.Remove(myTask);
@@ -248,7 +290,6 @@ namespace ToDoList.Controllers
         }
         
         //---------------------------------------------------
-
         public async Task<IActionResult> TakeTask(int id)
         {
             var myTask = await _context.MyTasks.FindAsync(id);
@@ -265,7 +306,7 @@ namespace ToDoList.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        
         private bool MyTaskExists(int id)
         {
             return _context.MyTasks.Any(e => e.Id == id);

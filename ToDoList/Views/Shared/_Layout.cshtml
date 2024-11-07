@@ -34,7 +34,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <p class="nav-link text-dark">Welcome @User.FindFirst("UserName")?.Value!</p>
+                            <p class="nav-link text-dark">Welcome @User.Identity.Name!</p>
                         </li>
                         
                         <li class="nav-item">
