@@ -1,0 +1,29 @@
+@model List<MyTask>
+
+<table class="table table-success">
+    <thead>
+    <tr>
+        <th>Номер</th>
+        <th>Названия</th>
+        <th>Описания</th>
+        <th>Приоритет</th>
+        <th>Статус</th>
+        <th>Создатель</th>
+        <th>Исполнитель</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var task in Model)
+    {
+    <tr>
+        <td>@task.Id</td>
+        <td>@task.Name</td>
+        <td>@task.Description</td>
+        <td>@task.Priority</td>
+        <td>@task.Status</td>
+        <td>@task.UserCreator?.UserName</td>
+        <td>@task.UserExecutor?.UserName</td>
+    </tr>
+    }
+    </tbody>
+</table>

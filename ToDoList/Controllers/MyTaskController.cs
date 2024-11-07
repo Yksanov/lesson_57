@@ -322,5 +322,26 @@ namespace ToDoList.Controllers
         {
             return _context.MyTasks.Any(e => e.Id == id);
         }
+        //-------------------------------------------
+
+        public async Task<IActionResult> ViewTasks()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            List<MyTask> taketask = await _context.MyTasks.Where(t => t.ExecutorId == user.Id).ToListAsync();
+            return View(taketask);
+        }
+        
+        public async Task<IActionResult> AvailableTasks()
+        {
+            var availabletask = await _context.MyTasks.Where(t => t.ExecutorId == null).ToListAsync();
+            return View(availabletask);
+        }
+        
+        public async Task<IActionResult> CreatedTasks()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var createdTasks = await _context.MyTasks.Where(t => t.CreatorId == user.Id).ToListAsync();
+            return View(createdTasks);
+        }
     }
 }
