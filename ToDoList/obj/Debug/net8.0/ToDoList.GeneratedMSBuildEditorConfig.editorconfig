@@ -46,8 +46,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/CreatedTask.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXENyZWF0ZWRUYXNrLmNzaHRtbA==
+[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/CreatedTasks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXENyZWF0ZWRUYXNrcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/Delete.cshtml]
@@ -66,8 +66,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/ViewTask.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXFZpZXdUYXNrLmNzaHRtbA==
+[D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/ViewTasks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlUYXNrXFZpZXdUYXNrcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Attractor/month\#2/ToDoList/ToDoList/Views/MyTask/_PartialViewTasks.cshtml]
