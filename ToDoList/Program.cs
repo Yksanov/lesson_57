@@ -1,5 +1,8 @@
+using System.IO.Compression;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 using ToDoList.Services;
@@ -7,7 +10,36 @@ using ToDoList.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.CacheProfiles.Add("EnableCaching", new CacheProfile()
+    {
+        Duration = 60,
+        Location = ResponseCacheLocation.Any,
+        NoStore = false
+    });
+    options.CacheProfiles.Add("NoCaching", new CacheProfile()
+    {
+        NoStore = true
+    });
+} );
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add(new DeflateCompressionProvider());
+});
+
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+//--------------------------------------------------------
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<TaskStoreContext>(options => options.UseNpgsql(connection))
