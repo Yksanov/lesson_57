@@ -118,7 +118,7 @@ namespace ToDoList.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Priority,CreatorId")] MyTask myTask)
+        public async Task<IActionResult> Create([Bind("Name,Description,Priority")] MyTask myTask)
         {
             if (ModelState.IsValid)
             {
