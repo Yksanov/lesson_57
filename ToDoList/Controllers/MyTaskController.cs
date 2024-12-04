@@ -92,7 +92,8 @@ namespace ToDoList.Controllers
             
             return View(vm);
         }
-        [ResponseCache(CacheProfileName = "NoCaching")]
+        
+        [ResponseCache(CacheProfileName = "EnableCaching")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -110,6 +111,7 @@ namespace ToDoList.Controllers
             return View(myTask);
         }
         
+        [ResponseCache(CacheProfileName = "NoCaching")]
         public IActionResult Create()
         {
             ViewData["Priorities"] = new SelectList(Enum.GetValues(typeof(Priority)).Cast<Priority>());
