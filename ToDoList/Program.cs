@@ -40,6 +40,7 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
     options.Level = CompressionLevel.Fastest;
 });
 //--------------------------------------------------------
+
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<TaskStoreContext>(options => options.UseNpgsql(connection))
@@ -49,7 +50,9 @@ builder.Services.AddDbContext<TaskStoreContext>(options => options.UseNpgsql(con
             options.Password.RequiredLength = 6;
             options.Password.RequireDigit = false;
         }).AddEntityFrameworkStores<TaskStoreContext>();
-
+//--------------------------------------------------------
+builder.Services.AddMemoryCache();
+//--------------------------------------------------------
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -80,7 +83,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+//--------------------------------------------------------
+app.UseResponseCaching();
+app.UseResponseCompression();
+//--------------------------------------------------------
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
