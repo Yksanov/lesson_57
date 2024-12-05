@@ -27,7 +27,6 @@ namespace ToDoList.Controllers
             _userManager = userManager;
         }
         
-        [ResponseCache(CacheProfileName = "EnableCaching")]
         public async Task<IActionResult> Index(Priority? priority, Status? status, string? taskname, DateOnly? dateFrom, DateOnly? dateTo, string? description, SortTaskState? sortOrder = SortTaskState.NameAsc, int page = 1)
         {
             IEnumerable<MyTask> task = await _context.MyTasks.Include(t => t.UserCreator).Include(t => t.UserExecutor).ToListAsync();
@@ -326,7 +325,7 @@ namespace ToDoList.Controllers
             return _context.MyTasks.Any(e => e.Id == id);
         }
         //-------------------------------------------
-
+        [ResponseCache(CacheProfileName = "EnableCaching")]
         public async Task<IActionResult> ViewTasks()
         {
             var user = await _userManager.GetUserAsync(User);
