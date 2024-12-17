@@ -1,0 +1,63 @@
+@model ToDoList.Models.UserI
+
+@{
+    ViewBag.Title = Model.Email;
+}
+
+<h3 class="text-center mb-4">Личный кабинет</h3>
+
+<div class="row">
+    <div class="col-5 mx-auto">
+
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <th>Id</th>
+                <td>@Model.Id</td>
+            </tr>
+            <tr>
+                <th>Почта</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <th>UserName</th>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <th>Age</th>
+                <td>@Model.Age</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h4>Редактировать профиль</h4>
+        <form asp-action="EditProfile" method="post">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" value="@Model.Email" required />
+            </div>
+            <div class="form-group">
+                <label for="age">Возраст:</label>
+                <input type="number" id="age" name="age" class="form-control" value="@Model.Age" required />
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
+        </form>
+
+        <h4>Изменить пароль</h4>
+        <form asp-action="ChangePassword" method="post">
+            <div class="form-group">
+                <label for="currentPassword">Текущий пароль:</label>
+                <input type="password" id="currentPassword" name="currentPassword" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Новый пароль:</label>
+                <input type="password" id="newPassword" name="newPassword" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Подтверждение пароля:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Изменить пароль</button>
+        </form>
+    </div>
+</div>

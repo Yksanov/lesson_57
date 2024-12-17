@@ -85,7 +85,8 @@ public class AccountController : Controller
                 string subject = "Добро пожаловать!";
                 string message = $"Здравствуйте, {user.UserName}\n" +
                                  $"Ваш логин успешно зарегистрирован.\n" +
-                                 $"Логин: {user.Email}";
+                                 $"Логин: {user.Email}\n" +
+                                 $"Ссылка на профиль: <a href=\"http://localhost/User/Profile/\"></a>";
                 await _emailService.SendEmailAsync(user.Email, subject, message);
                 
                 return RedirectToAction("Index", "MyTask");
