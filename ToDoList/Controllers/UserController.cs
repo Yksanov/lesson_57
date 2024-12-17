@@ -59,18 +59,41 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditProfile(string email, int age)
+    public async Task<IActionResult> EditProfile(string userName,string email, int age)
     {
         UserI user = await _userManager.GetUserAsync(User);
+        user.UserName = userName;
         user.Email = email;
         user.Age = age;
 
         await _userManager.UpdateAsync(user);
         string subject = "Данные профиля обновлены";
-        string message = $"Ваши профил был изменен:\nEmail: {user.Email}\nВозраст: {user.Age}";
+        string message = $"Ваши профил был изменен:\nИмя пользователя: {user.UserName}\nEmail: {user.Email}\nВозраст: {user.Age}";
 
         await _emailService.SendEmailAsync(user.Email, subject, message);
 
         return RedirectToAction("Profile");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UserData(int userId)
+    {
+        UserI user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        int taskCount = user.CreatorTasks?.Count ?? 0;
+        string subject = "Ваши публичные данные";
+        string message =  $"Публичная информация по вашему профилю:\n" +
+                          $"Имя пользователя: {user.UserName}\n" +
+                          $"Почта: {user.Email}\n" +
+                          $"Возраст: {user.Age}\n" +
+                          $"Количество задач: {taskCount}";
+        await _emailService.SendEmailAsync(user.Email, subject, message);
+
+        TempData["Message"] = "Ваши данные отправлены на почту";
+        return RedirectToAction("Profile", new { id = userId });
     }
 }

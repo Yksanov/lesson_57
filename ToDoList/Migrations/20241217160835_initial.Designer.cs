@@ -12,8 +12,8 @@ using ToDoList.Models;
 namespace ToDoList.Migrations
 {
     [DbContext(typeof(TaskStoreContext))]
-    [Migration("20241105043817_ChangeModelContext")]
-    partial class ChangeModelContext
+    [Migration("20241217160835_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -171,9 +171,15 @@ namespace ToDoList.Migrations
                     b.Property<DateOnly>("CreatedDate")
                         .HasColumnType("date");
 
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int?>("ExecutorId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -192,6 +198,10 @@ namespace ToDoList.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("ExecutorId");
 
                     b.ToTable("MyTasks");
                 });
@@ -251,6 +261,7 @@ namespace ToDoList.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
@@ -315,6 +326,30 @@ namespace ToDoList.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ToDoList.Models.MyTask", b =>
+                {
+                    b.HasOne("ToDoList.Models.UserI", "UserCreator")
+                        .WithMany("CreatorTasks")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ToDoList.Models.UserI", "UserExecutor")
+                        .WithMany("ExecutorTasks")
+                        .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("UserCreator");
+
+                    b.Navigation("UserExecutor");
+                });
+
+            modelBuilder.Entity("ToDoList.Models.UserI", b =>
+                {
+                    b.Navigation("CreatorTasks");
+
+                    b.Navigation("ExecutorTasks");
                 });
 #pragma warning restore 612, 618
         }

@@ -27,37 +27,80 @@
                 <th>Age</th>
                 <td>@Model.Age</td>
             </tr>
+            <tr>
+                <th>Количество созданных задач</th>
+                <td>@Model.CreatorTasks</td>
+            </tr>
             </tbody>
         </table>
+        
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Редактировать профиль</button>
 
-        <h4>Редактировать профиль</h4>
-        <form asp-action="EditProfile" method="post">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" class="form-control" value="@Model.Email" required />
-            </div>
-            <div class="form-group">
-                <label for="age">Возраст:</label>
-                <input type="number" id="age" name="age" class="form-control" value="@Model.Age" required />
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
-        </form>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#changePassword">Изменить пароль</button>
+    </div>
+</div>
 
-        <h4>Изменить пароль</h4>
-        <form asp-action="ChangePassword" method="post">
-            <div class="form-group">
-                <label for="currentPassword">Текущий пароль:</label>
-                <input type="password" id="currentPassword" name="currentPassword" class="form-control" required />
+<!-- Modal Edit-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel">Редактировать профиль</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="form-group">
-                <label for="newPassword">Новый пароль:</label>
-                <input type="password" id="newPassword" name="newPassword" class="form-control" required />
+            <div class="modal-body">
+                <form asp-action="EditProfile" method="post">
+                    <div class="form-group">
+                        <label for="name">UserName:</label>
+                        <input type="text" id="name" name="name" class="form-control" value="@Model.UserName" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" class="form-control" value="@Model.Email" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Возраст:</label>
+                        <input type="number" id="age" name="age" class="form-control" value="@Model.Age" required/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="confirmPassword">Подтверждение пароля:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Delete-->
+<div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-center" id="changePasswordLabel">Изменение пароль</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Изменить пароль</button>
-        </form>
+            <div class="modal-body">
+                <form asp-action="ChangePassword" method="post">
+                        <div class="form-group">
+                            <label for="currentPassword">Текущий пароль:</label>
+                            <input type="password" id="currentPassword" name="currentPassword" class="form-control" placeholder="Введите текущий пароль..." required />
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Новый пароль:</label>
+                            <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Введите новый пароль..." required />
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Подтверждение пароля:</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Повторите новый пароль..." required />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger mt-3">Изменить пароль</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
     </div>
 </div>
