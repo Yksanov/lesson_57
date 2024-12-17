@@ -4,6 +4,9 @@ namespace ToDoList.ViewModels;
 
 public class RegisterViewModel
 {
+    [Required(ErrorMessage = "UserName is required")]
+    public string UserName { get; set; }
+    
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress(ErrorMessage = "Invalid Email Address")]
     public string Email { get; set; }

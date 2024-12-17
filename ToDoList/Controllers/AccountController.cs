@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Models;
+using ToDoList.Services;
 using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers;
@@ -9,11 +10,13 @@ public class AccountController : Controller
 {
     private readonly UserManager<UserI> _userManager;
     private readonly SignInManager<UserI> _signInManager;
+    private readonly EmailService _emailService;
 
-    public AccountController(UserManager<UserI> userManager, SignInManager<UserI> signInManager)
+    public AccountController(UserManager<UserI> userManager, SignInManager<UserI> signInManager, EmailService emailService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _emailService = emailService;
     }
 
     [HttpGet]
@@ -78,6 +81,13 @@ public class AccountController : Controller
             {
                 await _signInManager.SignInAsync(user, false);
                 await _userManager.AddToRoleAsync(user, "user");
+
+                string subject = "Добро пожаловать!";
+                string message = $"Здравствуйте, {user.UserName}\n" +
+                                 $"Ваш логин успешно зарегистрирован.\n" +
+                                 $"Логин: {user.Email}";
+                await _emailService.SendEmailAsync(user.Email, subject, message);
+                
                 return RedirectToAction("Index", "MyTask");
             }
 
