@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Models;
@@ -89,6 +90,17 @@ public class AccountController : Controller
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var callbackUrl = Url.Action(
+                    "ConfirmEmail",
+                    "Account",
+                    new {userId = user.Id, code = code},
+                    protocol: HttpContext.Request.Scheme);
+                _emailService.SendEmailAsync(model.Email, "Confirm your account",
+                    $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>Перейти</a>");
+                //return View("Для завершения регистрация проверьте электронную почту и перейдите по ссылке, указанной в письме");
+                
+                //------------------------------------------------------
                 await _signInManager.SignInAsync(user, false);
                 await _userManager.AddToRoleAsync(user, "user");
 
@@ -96,7 +108,7 @@ public class AccountController : Controller
                 string message = $"Здравствуйте, {user.UserName}\n" +
                                  $"Ваш логин успешно зарегистрирован.\n" +
                                  $"Логин: {user.Email}\n" +
-                                 $"Ссылка на профиль: <a href=\"http://localhost/User/Profile/{user.Id}\"></a>";
+                                 $"Ссылка на профиль: <a href=\"http://localhost/User/Profile/{user.Id}\">Профиль</a>";
                 await _emailService.SendEmailAsync(user.Email, subject, message);
                 
                 return RedirectToAction("Index", "MyTask");
@@ -110,6 +122,27 @@ public class AccountController : Controller
         return View(model);
     }
 
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> ConfirmEmail(string userId, string code)
+    {
+        if (userId == null || code == null)
+        {
+            return NotFound();
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, code);
+        if (result.Succeeded)
+            return RedirectToAction("Index", "MyTask");
+        else
+            return View("Error");
+    }
     
     [HttpGet]
     public IActionResult AccessDenied()

@@ -49,7 +49,8 @@ builder.Services.AddDbContext<TaskStoreContext>(options => options.UseNpgsql(con
         {
             options.Password.RequiredLength = 6;
             options.Password.RequireDigit = false;
-        }).AddEntityFrameworkStores<TaskStoreContext>();
+        }).AddEntityFrameworkStores<TaskStoreContext>()
+    .AddDefaultTokenProviders();
 //--------------------------------------------------------
 builder.Services.AddMemoryCache();
 //--------------------------------------------------------
