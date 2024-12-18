@@ -5,32 +5,28 @@
 
 <h4 class="text-center">Вход на сайт</h4>
 <div class="row">
-    <div class="card border-2">
-        <div class="card-body d-flex justify-content-center">
-            <div class="col-md-4">
+    <div class="col-md-4 mx-auto">
+        <div class="card border-3">
+            <div class="card-body">
                 <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
                     <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                     <div>
                         <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Введите Email</label>
-                            <input type="email" asp-for="Email" class="form-control"/>
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <label asp-for="EmailOrUserName" class="form-label">Введите логин или почта</label>
+                            <input type="text" asp-for="EmailOrUserName" class="form-control"/>
+                            <span asp-validation-for="EmailOrUserName" class="text-danger"></span>
                         </div>
                         <div>
                             <label asp-for="Password" class="form-label">Введите пароль</label>
                             <input asp-for="Password" class="form-control"/>
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
-
                         <div>
                             <label asp-for="Password" class="form-label">Remember Me?</label>
                             <input asp-for="RememerMe"/>
                         </div>
-                        
                         <input type="hidden" asp-for="ReturnUrl" value="@ViewBag.ReturnUrl">
-                        
-                        
-                        <div class="form-group py-3">
+                        <div class="form-group py-3 text-center">
                             <input type="submit" value="Войти" class="btn btn-outline-primary px-5"/>
                         </div>
                     </div>

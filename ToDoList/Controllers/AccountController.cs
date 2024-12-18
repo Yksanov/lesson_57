@@ -32,9 +32,19 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            UserI user = await _userManager.FindByEmailAsync(model.Email);
-            Microsoft.AspNetCore.Identity.SignInResult signInResult =
-                await _signInManager.PasswordSignInAsync(user, model.Password, model.RememerMe, false);
+            UserI user = await _userManager.FindByEmailAsync(model.EmailOrUserName);
+            if (user == null)
+            {
+                user = await _userManager.FindByNameAsync(model.EmailOrUserName);
+            }
+
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Пользователь не найден!");
+                return View(model);
+            }
+            
+            Microsoft.AspNetCore.Identity.SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememerMe, false);
             if (signInResult.Succeeded)
             {
                 if (!string.IsNullOrEmpty(model.ReturnUrl))
@@ -46,7 +56,7 @@ public class AccountController : Controller
             }
 
             ViewBag.ReturnUrl = HttpContext.Request.Query["ReturnUrl"];
-            ModelState.AddModelError(string.Empty, "Error");
+            ModelState.AddModelError(string.Empty, "Неправильное логин или пароль");
         }
 
         return View(model);
@@ -86,7 +96,7 @@ public class AccountController : Controller
                 string message = $"Здравствуйте, {user.UserName}\n" +
                                  $"Ваш логин успешно зарегистрирован.\n" +
                                  $"Логин: {user.Email}\n" +
-                                 $"Ссылка на профиль: <a href=\"http://localhost/User/Profile/\"></a>";
+                                 $"Ссылка на профиль: <a href=\"http://localhost/User/Profile/{user.Id}\"></a>";
                 await _emailService.SendEmailAsync(user.Email, subject, message);
                 
                 return RedirectToAction("Index", "MyTask");
