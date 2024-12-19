@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 using ToDoList.Services;
 using ToDoList.ViewModels;
@@ -96,9 +97,8 @@ public class AccountController : Controller
                     "Account",
                     new {userId = user.Id, code = code},
                     protocol: HttpContext.Request.Scheme);
-                _emailService.SendEmailAsync(model.Email, "Confirm your account",
+                await _emailService.SendEmailAsync(model.Email, "Подтверждение вашего аккаунта",
                     $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>Перейти</a>");
-                //return View("Для завершения регистрация проверьте электронную почту и перейдите по ссылке, указанной в письме");
                 
                 //------------------------------------------------------
                 await _signInManager.SignInAsync(user, false);
@@ -139,9 +139,44 @@ public class AccountController : Controller
 
         var result = await _userManager.ConfirmEmailAsync(user, code);
         if (result.Succeeded)
-            return RedirectToAction("Index", "MyTask");
+            return RedirectToAction("Profile", "User");
         else
             return View("Error");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResendConfirmEmail(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+        {
+            ModelState.AddModelError(String.Empty, "Email не может быть пустым");
+            return RedirectToAction("Profile", "User");
+        }
+
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            ModelState.AddModelError(String.Empty, "Пользователь с таким email не найден");
+            return RedirectToAction("Profile", "User");
+        }
+
+        if (await _userManager.IsEmailConfirmedAsync(user))
+        {
+            TempData["Message"] = "Email уже подтвержден";
+            return RedirectToAction("Profile", "User");
+        }
+        
+        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var callbackUrl = Url.Action(
+            "ConfirmEmail",
+            "Account",
+            new {userId = user.Id, code = code},
+            protocol: HttpContext.Request.Scheme);
+        await _emailService.SendEmailAsync(email, "Подтверждение вашего аккаунта",
+            $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>Подтвердить Email</a>");
+        TempData["Message"] = "Письмо с подтверждение отправдено повторно. Проверьте почту";
+        return RedirectToAction("Profile", "User");
     }
     
     [HttpGet]

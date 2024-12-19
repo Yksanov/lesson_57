@@ -1,9 +1,9 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ToDoList.Models.UserI
-
 @{
     ViewBag.Title = Model.Email;
 }
-
 <h4 class="text-center mb-4">Личный кабинет</h4>
 @if (TempData["Message"] != null)
 {
@@ -47,6 +47,20 @@
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#changePassword">Изменить пароль</button>
         </div>
         <div>
+            @inject UserManager<UserI> UserManager
+            @if (!await UserManager.IsEmailConfirmedAsync(Model))
+            {
+                <div class="alert alert-warning">Ваш email не подтвержден
+                    <form method="post" asp-action="ResendConfirmEmail" asp-controller="Account">
+                        <input type="email" name="email" value="@Model.Email" hidden />
+                        <button type="submit" class="btn btn-warning">Подтвердить email</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-success">Ваш email успешно подтвержден</div>
+            }
             <form method="post" asp-action="UserData" class="d-inline">
                 <input type="hidden" name="userId" value="@Model.Id">
                 <button type="submit" class="btn btn-outline-success">Отправить на почту</button>
@@ -54,7 +68,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modal Edit-->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -86,8 +99,6 @@
         </div>
     </div>
 </div>
-
-
 <!-- Modal Delete-->
 <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
     <div class="modal-dialog">

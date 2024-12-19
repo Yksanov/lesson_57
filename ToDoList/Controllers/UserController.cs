@@ -107,7 +107,7 @@ public class UserController : Controller
 
         int taskCount = user.CreatorTasks?.Count ?? 0;
         int executorCount = user.ExecutorTasks?.Count ?? 0;
-        string subject = "Ваши публичные данные";
+        string subject = "Ваши данные";
         string message =  $"Публичная информация по вашему профилю:\n" +
                           $"Имя пользователя: {user.UserName}\n" +
                           $"Почта: {user.Email}\n" +
